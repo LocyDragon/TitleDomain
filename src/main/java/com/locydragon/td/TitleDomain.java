@@ -8,9 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Administrator(雾
@@ -18,9 +17,9 @@ import java.util.List;
 public class TitleDomain extends JavaPlugin {
 	public static TitleDomain instance;
 	public static FileConfiguration config;
-	public static List<Domain> domainList = new ArrayList<>();
-	public static HashMap<String, Domain> domainNameMap = new HashMap<>();
-	public static HashMap<String, AsyncDomainReader> readerHashMap = new HashMap<>();
+	public static Vector<Domain> domainList = new Vector<>();
+	public static ConcurrentHashMap<String, Domain> domainNameMap = new ConcurrentHashMap<>();
+	public static ConcurrentHashMap<String, AsyncDomainReader> readerHashMap = new ConcurrentHashMap<>();
 
 	@Override
 	public void onEnable() {
