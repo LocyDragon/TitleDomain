@@ -17,7 +17,8 @@ public class TitleDomain extends JavaPlugin {
 	public static TitleDomain instance;
 	public static FileConfiguration config;
 	public static List<Domain> domainList = new ArrayList<>();
-	public static HashMap<String,Domain> domainNameMap = new HashMap<>();
+	public static HashMap<String, Domain> domainNameMap = new HashMap<>();
+
 	@Override
 	public void onEnable() {
 		getLogger().info("TitleDomain插件已经成功加载了~");
@@ -30,7 +31,7 @@ public class TitleDomain extends JavaPlugin {
 			domainList.add(domainObject);
 			domainNameMap.put(domain, domainObject);
 		}
-		getLogger().info("已经载入"+domainList.size()+"个区域.");
+		getLogger().info("已经载入" + domainList.size() + "个区域.");
 	}
 
 	public static void saveConfiguration() {

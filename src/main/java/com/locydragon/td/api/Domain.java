@@ -16,7 +16,8 @@ public class Domain {
 	private Location loc1;
 	private Location loc2;
 	private String domainName;
-    private int height = -1;
+	private int height = -1;
+
 	public Domain(World inWhich, String type, Location loc1, Location loc2, String domainName) {
 		this.inWhich = inWhich;
 		this.type = DomainSelectTypeEnum.valueOf(type.toUpperCase());
@@ -60,27 +61,27 @@ public class Domain {
 	}
 
 	public void save() {
-		TitleDomain.config.set(this.domainName+".inWhich", this.inWhich.getName());
-		TitleDomain.config.set(this.domainName+".loc1", LocationSelect.serialize(this.loc1));
-		TitleDomain.config.set(this.domainName+".loc2", LocationSelect.serialize(this.loc2));
-		TitleDomain.config.set(this.domainName+".type", this.type.toString());
-		TitleDomain.config.set(this.domainName+".height", this.height);
+		TitleDomain.config.set(this.domainName + ".inWhich", this.inWhich.getName());
+		TitleDomain.config.set(this.domainName + ".loc1", LocationSelect.serialize(this.loc1));
+		TitleDomain.config.set(this.domainName + ".loc2", LocationSelect.serialize(this.loc2));
+		TitleDomain.config.set(this.domainName + ".type", this.type.toString());
+		TitleDomain.config.set(this.domainName + ".height", this.height);
 		TitleDomain.saveConfiguration();
 	}
 
 	public static Domain getByName(String domainName) {
-		if (TitleDomain.config.getString(domainName+".inWhich", "Unknown..").equals("Unknown..")) {
+		if (TitleDomain.config.getString(domainName + ".inWhich", "Unknown..").equals("Unknown..")) {
 			return null;
 		}
 		World inWhich
-				= Bukkit.getWorld(TitleDomain.config.getString(domainName+".inWhich"));
+				= Bukkit.getWorld(TitleDomain.config.getString(domainName + ".inWhich"));
 		Location loc1
-				= LocationSelect.fromString(TitleDomain.config.getString( domainName+".loc1"));
+				= LocationSelect.fromString(TitleDomain.config.getString(domainName + ".loc1"));
 		Location loc2
-				= LocationSelect.fromString(TitleDomain.config.getString(domainName+".loc2"));
+				= LocationSelect.fromString(TitleDomain.config.getString(domainName + ".loc2"));
 		DomainSelectTypeEnum type
-				= DomainSelectTypeEnum.valueOf(TitleDomain.config.getString(domainName+".type").toUpperCase());
-		int height = TitleDomain.config.getInt(domainName+".height");
+				= DomainSelectTypeEnum.valueOf(TitleDomain.config.getString(domainName + ".type").toUpperCase());
+		int height = TitleDomain.config.getInt(domainName + ".height");
 		if (loc1 == null && loc2 == null && height == -1) {
 			return new Domain(inWhich, DomainSelectTypeEnum.WORLD_DOMAIN.toString(), domainName);
 		}

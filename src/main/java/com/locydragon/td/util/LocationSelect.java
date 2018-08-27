@@ -1,4 +1,5 @@
 package com.locydragon.td.util;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -11,6 +12,7 @@ public class LocationSelect {
 				.append(String.valueOf(loc.getBlockZ()))
 				.toString();
 	}
+
 	public static Location fromString(String serialize) {
 		if (serialize == null) {
 			return null;
