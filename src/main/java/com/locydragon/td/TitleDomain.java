@@ -2,6 +2,7 @@ package com.locydragon.td;
 
 import com.locydragon.td.api.Domain;
 import com.locydragon.td.command.TitleCommand;
+import com.locydragon.td.listeners.ThreadLoadListener;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,6 +23,7 @@ public class TitleDomain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		getLogger().info("TitleDomain插件已经成功加载了~");
+		Bukkit.getPluginManager().registerEvents(new ThreadLoadListener(), this);
 		Bukkit.getPluginCommand("td").setExecutor(new TitleCommand());
 		saveDefaultConfig();
 		instance = this;

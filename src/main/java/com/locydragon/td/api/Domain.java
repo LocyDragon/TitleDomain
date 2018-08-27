@@ -17,6 +17,7 @@ public class Domain {
 	private Location loc2;
 	private String domainName;
 	private int height = -1;
+	private int radius = -1;
 
 	public Domain(World inWhich, String type, Location loc1, Location loc2, String domainName) {
 		this.inWhich = inWhich;
@@ -26,12 +27,13 @@ public class Domain {
 		this.domainName = domainName;
 	}
 
-	public Domain(World inWhich, String type, Location circle, String domainName, int height) {
+	public Domain(World inWhich, String type, Location circle, String domainName, int height, int radius) {
 		this.inWhich = inWhich;
 		this.type = DomainSelectTypeEnum.valueOf(type.toUpperCase());
 		this.loc1 = circle;
 		this.domainName = domainName;
 		this.height = height;
+		this.radius = radius;
 	}
 
 	public Domain(World inWhich, String type, String domainName) {
@@ -60,12 +62,21 @@ public class Domain {
 		return this.type;
 	}
 
+	public int getHeight() {
+		return this.height;
+	}
+
+	public int getRadius() {
+		return this.radius;
+	}
+
 	public void save() {
 		TitleDomain.config.set(this.domainName + ".inWhich", this.inWhich.getName());
 		TitleDomain.config.set(this.domainName + ".loc1", LocationSelect.serialize(this.loc1));
 		TitleDomain.config.set(this.domainName + ".loc2", LocationSelect.serialize(this.loc2));
 		TitleDomain.config.set(this.domainName + ".type", this.type.toString());
 		TitleDomain.config.set(this.domainName + ".height", this.height);
+		TitleDomain.config.set(this.domainName + ".radius", this.radius);
 		TitleDomain.saveConfiguration();
 	}
 
@@ -82,13 +93,15 @@ public class Domain {
 		DomainSelectTypeEnum type
 				= DomainSelectTypeEnum.valueOf(TitleDomain.config.getString(domainName + ".type").toUpperCase());
 		int height = TitleDomain.config.getInt(domainName + ".height");
-		if (loc1 == null && loc2 == null && height == -1) {
+		int radius = TitleDomain.config.getInt(domainName + ".radius");
+		if (loc1 == null && loc2 == null && height == -1 && radius == -1) {
 			return new Domain(inWhich, DomainSelectTypeEnum.WORLD_DOMAIN.toString(), domainName);
 		}
-		if (loc1 == null && loc2 != null && height != -1) {
-			return new Domain(inWhich, DomainSelectTypeEnum.CIRCLE_DOMAIN.toString(), loc1, domainName, height);
+		if (loc1 == null && loc2 != null && height != -1 && radius != -1) {
+			return new Domain(inWhich, DomainSelectTypeEnum.CIRCLE_DOMAIN.toString()
+					, loc1, domainName, height, radius);
 		}
-		if (loc1 != null && loc2 != null && height == -1) {
+		if (loc1 != null && loc2 != null && height == -1 && radius == -1) {
 			return new Domain(inWhich, DomainSelectTypeEnum.NORMAL_DOMAIN.toString(), loc1, loc2, domainName);
 		}
 		return null;
