@@ -7,6 +7,8 @@ import com.locydragon.td.util.CylinderHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import static com.locydragon.td.api.type.DomainSelectTypeEnum.NORMAL_DOMAIN;
+
 public class AsyncDomainReader extends Thread {
 	public static final Long CHECK_PER_SECOND = 500L;
 	private Player target;
@@ -35,13 +37,23 @@ public class AsyncDomainReader extends Thread {
 						if (target.getWorld().getName().equals(domain.getInWorld())) {
 							if (last != null && !last.getDomainName().equals(domain.getDomainName())) {
 								this.now = domain;
-								Bukkit.getPluginManager()
-										.callEvent(new DomainChangeEvent(this.target, this.last, this.now));
+								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
+									@Override
+									public void run() {
+										Bukkit.getPluginManager()
+												.callEvent(new DomainChangeEvent(target, last, now));
+									}
+								});
 								break Loop;
 							} else if (last == null) {
 								this.now = domain;
-								Bukkit.getPluginManager()
-										.callEvent(new DomainChangeEvent(this.target, this.last, this.now));
+								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
+									@Override
+									public void run() {
+										Bukkit.getPluginManager()
+												.callEvent(new DomainChangeEvent(target, last, now));
+									}
+								});
 								break Loop;
 							}
 						}
@@ -51,13 +63,23 @@ public class AsyncDomainReader extends Thread {
 								.isInAABB(domain.getSelectFist().toVector(), domain.getSelectSecond().toVector())) {
 							if (last != null && !last.getDomainName().equals(domain.getDomainName())) {
 								this.now = domain;
-								Bukkit.getPluginManager()
-										.callEvent(new DomainChangeEvent(this.target, this.last, this.now));
+								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
+									@Override
+									public void run() {
+										Bukkit.getPluginManager()
+												.callEvent(new DomainChangeEvent(target, last, now));
+									}
+								});
 								break Loop;
 							} else if (last == null) {
 								this.now = domain;
-								Bukkit.getPluginManager()
-										.callEvent(new DomainChangeEvent(this.target, this.last, this.now));
+								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
+									@Override
+									public void run() {
+										Bukkit.getPluginManager()
+												.callEvent(new DomainChangeEvent(target, last, now));
+									}
+								});
 								break Loop;
 							}
 						}
@@ -66,13 +88,23 @@ public class AsyncDomainReader extends Thread {
 								domain.getSelectFist(), domain.getHeight(), domain.getRadius())) {
 							if (last != null && !last.getDomainName().equals(domain.getDomainName())) {
 								this.now = domain;
-								Bukkit.getPluginManager()
-										.callEvent(new DomainChangeEvent(this.target, this.last, this.now));
+								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
+									@Override
+									public void run() {
+										Bukkit.getPluginManager()
+												.callEvent(new DomainChangeEvent(target, last, now));
+									}
+								});
 								break Loop;
 							} else if (last == null) {
 								this.now = domain;
-								Bukkit.getPluginManager()
-										.callEvent(new DomainChangeEvent(this.target, this.last, this.now));
+								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
+									@Override
+									public void run() {
+										Bukkit.getPluginManager()
+												.callEvent(new DomainChangeEvent(target, last, now));
+									}
+								});
 								break Loop;
 							}
 						}

@@ -3,6 +3,7 @@ package com.locydragon.td;
 import com.locydragon.td.api.Domain;
 import com.locydragon.td.command.TitleCommand;
 import com.locydragon.td.listeners.ThreadLoadListener;
+import com.locydragon.td.listeners.thread.AsyncDomainReader;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +20,7 @@ public class TitleDomain extends JavaPlugin {
 	public static FileConfiguration config;
 	public static List<Domain> domainList = new ArrayList<>();
 	public static HashMap<String, Domain> domainNameMap = new HashMap<>();
+	public static HashMap<String, AsyncDomainReader> readerHashMap = new HashMap<>();
 
 	@Override
 	public void onEnable() {
