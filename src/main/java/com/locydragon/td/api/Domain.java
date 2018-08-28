@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import javax.annotation.Nullable;
+
 /**
  * @author Administrator(雾
  */
@@ -46,10 +48,12 @@ public class Domain {
 		return this.domainName;
 	}
 
+	@Nullable
 	public Location getSelectFist() {
 		return this.loc1;
 	}
 
+	@Nullable
 	public Location getSelectSecond() {
 		return this.loc2;
 	}
@@ -72,8 +76,12 @@ public class Domain {
 
 	public void save() {
 		TitleDomain.config.set(this.domainName + ".inWhich", this.inWhich.getName());
-		TitleDomain.config.set(this.domainName + ".loc1", LocationSelect.serialize(this.loc1));
-		TitleDomain.config.set(this.domainName + ".loc2", LocationSelect.serialize(this.loc2));
+		if (loc1 != null) {
+			TitleDomain.config.set(this.domainName + ".loc1", LocationSelect.serialize(this.loc1));
+		}
+		if (loc2 != null) {
+			TitleDomain.config.set(this.domainName + ".loc2", LocationSelect.serialize(this.loc2));
+		}
 		TitleDomain.config.set(this.domainName + ".type", this.type.toString());
 		TitleDomain.config.set(this.domainName + ".height", this.height);
 		TitleDomain.config.set(this.domainName + ".radius", this.radius);
@@ -87,9 +95,9 @@ public class Domain {
 		World inWhich
 				= Bukkit.getWorld(TitleDomain.config.getString(domainName + ".inWhich"));
 		Location loc1
-				= LocationSelect.fromString(TitleDomain.config.getString(domainName + ".loc1"));
+				= LocationSelect.fromString(TitleDomain.config.getString(domainName + ".loc1", null));
 		Location loc2
-				= LocationSelect.fromString(TitleDomain.config.getString(domainName + ".loc2"));
+				= LocationSelect.fromString(TitleDomain.config.getString(domainName + ".loc2", null));
 		DomainSelectTypeEnum type
 				= DomainSelectTypeEnum.valueOf(TitleDomain.config.getString(domainName + ".type").toUpperCase());
 		int height = TitleDomain.config.getInt(domainName + ".height");

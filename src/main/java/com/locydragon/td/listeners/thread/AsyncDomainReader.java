@@ -7,8 +7,9 @@ import com.locydragon.td.util.CylinderHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import static com.locydragon.td.api.type.DomainSelectTypeEnum.NORMAL_DOMAIN;
-
+/**
+ * @author Administrator
+ */
 public class AsyncDomainReader extends Thread {
 	public static final Long CHECK_PER_SECOND = 500L;
 	private Player target;
@@ -34,7 +35,7 @@ public class AsyncDomainReader extends Thread {
 			for (Domain domain : TitleDomain.domainList) {
 				switch (domain.getType()) {
 					case WORLD_DOMAIN:
-						if (target.getWorld().getName().equals(domain.getInWorld())) {
+						if (target.getWorld().getName().equals(domain.getInWorld().getName())) {
 							if (last != null && !last.getDomainName().equals(domain.getDomainName())) {
 								this.now = domain;
 								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
@@ -60,7 +61,8 @@ public class AsyncDomainReader extends Thread {
 						break;
 					case NORMAL_DOMAIN:
 						if (target.getLocation().toVector()
-								.isInAABB(domain.getSelectFist().toVector(), domain.getSelectSecond().toVector())) {
+								.isInAABB(domain.getSelectFist().toVector(), domain.getSelectSecond().toVector())
+								&& target.getWorld().getName().equals(domain.getInWorld().getName())) {
 							if (last != null && !last.getDomainName().equals(domain.getDomainName())) {
 								this.now = domain;
 								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
@@ -85,7 +87,8 @@ public class AsyncDomainReader extends Thread {
 						}
 					case CIRCLE_DOMAIN:
 						if (CylinderHelper.isInCylinder(target.getLocation(),
-								domain.getSelectFist(), domain.getHeight(), domain.getRadius())) {
+								domain.getSelectFist(), domain.getHeight(), domain.getRadius())
+								&& target.getWorld().getName().equals(domain.getInWorld().getName())) {
 							if (last != null && !last.getDomainName().equals(domain.getDomainName())) {
 								this.now = domain;
 								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
@@ -109,8 +112,17 @@ public class AsyncDomainReader extends Thread {
 							}
 						}
 					default:
-						break;
+						continue Loop;
 				}
+			}
+			if (this.now == null && this.last != null) {
+				Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
+					@Override
+					public void run() {
+						Bukkit.getPluginManager()
+								.callEvent(new DomainChangeEvent(target, last, now));
+					}
+				});
 			}
 		}
 	}
