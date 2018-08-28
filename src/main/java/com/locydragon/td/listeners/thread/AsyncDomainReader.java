@@ -36,8 +36,8 @@ public class AsyncDomainReader extends Thread {
 				switch (domain.getType()) {
 					case WORLD_DOMAIN:
 						if (target.getWorld().getName().equals(domain.getInWorld().getName())) {
+							this.now = domain;
 							if (last != null && !last.getDomainName().equals(domain.getDomainName())) {
-								this.now = domain;
 								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
 									@Override
 									public void run() {
@@ -47,7 +47,6 @@ public class AsyncDomainReader extends Thread {
 								});
 								break Loop;
 							} else if (last == null) {
-								this.now = domain;
 								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
 									@Override
 									public void run() {
@@ -63,8 +62,8 @@ public class AsyncDomainReader extends Thread {
 						if (target.getLocation().toVector()
 								.isInAABB(domain.getSelectFist().toVector(), domain.getSelectSecond().toVector())
 								&& target.getWorld().getName().equals(domain.getInWorld().getName())) {
+							this.now = domain;
 							if (last != null && !last.getDomainName().equals(domain.getDomainName())) {
-								this.now = domain;
 								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
 									@Override
 									public void run() {
@@ -74,7 +73,6 @@ public class AsyncDomainReader extends Thread {
 								});
 								break Loop;
 							} else if (last == null) {
-								this.now = domain;
 								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
 									@Override
 									public void run() {
@@ -89,8 +87,8 @@ public class AsyncDomainReader extends Thread {
 						if (CylinderHelper.isInCylinder(target.getLocation(),
 								domain.getSelectFist(), domain.getHeight(), domain.getRadius())
 								&& target.getWorld().getName().equals(domain.getInWorld().getName())) {
+							this.now = domain;
 							if (last != null && !last.getDomainName().equals(domain.getDomainName())) {
-								this.now = domain;
 								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
 									@Override
 									public void run() {
@@ -100,7 +98,6 @@ public class AsyncDomainReader extends Thread {
 								});
 								break Loop;
 							} else if (last == null) {
-								this.now = domain;
 								Bukkit.getScheduler().runTask(TitleDomain.instance, new Runnable() {
 									@Override
 									public void run() {

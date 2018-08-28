@@ -3,6 +3,7 @@ package com.locydragon.td;
 import com.locydragon.td.api.Domain;
 import com.locydragon.td.command.TitleCommand;
 import com.locydragon.td.listeners.ThreadLoadListener;
+import com.locydragon.td.listeners.select.DomainSelectMain;
 import com.locydragon.td.listeners.thread.AsyncDomainReader;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,6 +26,7 @@ public class TitleDomain extends JavaPlugin {
 	public void onEnable() {
 		getLogger().info("TitleDomain插件已经成功加载了~");
 		Bukkit.getPluginManager().registerEvents(new ThreadLoadListener(), this);
+		Bukkit.getPluginManager().registerEvents(new DomainSelectMain(), this);
 		Bukkit.getPluginCommand("td").setExecutor(new TitleCommand());
 		saveDefaultConfig();
 		instance = this;
@@ -40,5 +42,17 @@ public class TitleDomain extends JavaPlugin {
 	public static void saveConfiguration() {
 		instance.saveConfig();
 		instance.reloadConfig();
+	}
+
+	public static void reloadConfiguration() {
+		instance.reloadConfig();
+		domainList.clear();
+		domainNameMap.clear();
+		for (String domain : config.getKeys(false)) {
+			Domain domainObject = Domain.getByName(domain);
+			domainList.add(domainObject);
+			domainNameMap.put(domain, domainObject);
+		}
+		instance.getLogger().info("已经载入" + domainList.size() + "个区域.");
 	}
 }

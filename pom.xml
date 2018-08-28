@@ -110,5 +110,17 @@
             <version>1.11.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>jsr250-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ProtocolLib</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>3.6.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/ProtocolLib.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>
