@@ -17,7 +17,7 @@ public class DomainSelectMain implements Listener {
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		if (e.getItem() != null && e.getItem().getType() == Material.GOLD_HOE &&
-				e.getPlayer().hasPermission("TitleDomain.select")
+				e.getPlayer().hasPermission("TitleDomain.admin")
 				&& e.getClickedBlock() != null) {
 			if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
 				if (selectFist.keySet().contains(e.getPlayer().getName())) {
