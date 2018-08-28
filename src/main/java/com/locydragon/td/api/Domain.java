@@ -100,15 +100,12 @@ public class Domain {
 				= DomainSelectTypeEnum.valueOf(TitleDomain.config.getString(domainName + ".type").toUpperCase());
 		int height = TitleDomain.config.getInt(domainName + ".height");
 		int radius = TitleDomain.config.getInt(domainName + ".radius");
-		if (loc1 == null && loc2 == null && height == -1 && radius == -1) {
-			return new Domain(inWhich, DomainSelectTypeEnum.WORLD_DOMAIN.toString(), domainName);
-		}
-		if (loc1 == null && loc2 != null && height != -1 && radius != -1) {
-			return new Domain(inWhich, DomainSelectTypeEnum.CIRCLE_DOMAIN.toString()
-					, loc1, domainName, height, radius);
-		}
-		if (loc1 != null && loc2 != null && height == -1 && radius == -1) {
-			return new Domain(inWhich, DomainSelectTypeEnum.NORMAL_DOMAIN.toString(), loc1, loc2, domainName);
+		if (type == DomainSelectTypeEnum.WORLD_DOMAIN) {
+			return new Domain(inWhich, type.toString(), domainName);
+		} else if (type == DomainSelectTypeEnum.CIRCLE_DOMAIN) {
+			return new Domain(inWhich, type.toString(), loc1, domainName, height, radius);
+		} else if (type == DomainSelectTypeEnum.NORMAL_DOMAIN) {
+			return new Domain(inWhich, type.toString(), loc1, loc2, domainName);
 		}
 		return null;
 	}

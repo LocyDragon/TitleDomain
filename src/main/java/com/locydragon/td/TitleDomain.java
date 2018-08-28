@@ -41,6 +41,7 @@ public class TitleDomain extends JavaPlugin {
 		Bukkit.getPluginCommand("td").setExecutor(new TitleCommand());
 		saveDefaultConfig();
 		loadTitle();
+		loadSettings();
 		instance = this;
 		config = getConfig();
 		for (String domain : config.getKeys(false)) {
