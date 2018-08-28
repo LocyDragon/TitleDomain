@@ -2,6 +2,7 @@ package com.locydragon.td.api;
 
 import com.locydragon.td.TitleDomain;
 import com.locydragon.td.api.type.DomainSelectTypeEnum;
+import com.locydragon.td.util.CylinderHelper;
 import com.locydragon.td.util.LocationSelect;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -114,8 +115,18 @@ public class Domain {
 
 	public boolean isCoincideWith(Location loc1, Location loc2) {
 		for (Location loc : LocationSelect.fillWith(loc1, loc2)) {
-			if (LocationSelect.isInAABB(loc, this.loc1, this.loc2)) {
-				return true;
+			if (type == DomainSelectTypeEnum.NORMAL_DOMAIN) {
+				if (LocationSelect.isInAABB(loc, this.loc1, this.loc2)) {
+					return true;
+				}
+			} else if (type == DomainSelectTypeEnum.CIRCLE_DOMAIN) {
+				if (CylinderHelper.isInCylinder(loc, this.loc1, this.height, this.radius)) {
+					return true;
+				}
+			} else if (type == DomainSelectTypeEnum.WORLD_DOMAIN) {
+				if (this.inWhich.getName().equals(loc.getWorld().getName())) {
+					return true;
+				}
 			}
 		}
 		return false;

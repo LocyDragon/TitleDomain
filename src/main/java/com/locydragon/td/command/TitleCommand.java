@@ -10,6 +10,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * @author Administrator
+ */
 public class TitleCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
@@ -51,6 +54,10 @@ public class TitleCommand implements CommandExecutor {
 				String domainName = args[1];
 				Location selectFirst = DomainSelectMain.selectFist.get(p.getName());
 				Location selectSecond = DomainSelectMain.selectSecond.get(p.getName());
+				if (!selectFirst.getWorld().getName().equals(selectSecond.getWorld().getName())) {
+					sender.sendMessage("§9[TitleDomain]§c你选取的两点不在同一世界.");
+					return false;
+				}
 				boolean willReturn = false;
 				if (selectFirst == null) {
 					sender.sendMessage("§9[TitleDomain]§c你没有选取点A.");
@@ -73,7 +80,7 @@ public class TitleCommand implements CommandExecutor {
 						return false;
 					}
 				}
-				Domain newDomain = new Domain(p.getWorld(), DomainSelectTypeEnum.NORMAL_DOMAIN.toString(), selectFirst,
+				Domain newDomain = new Domain(selectFirst.getWorld(), DomainSelectTypeEnum.NORMAL_DOMAIN.toString(), selectFirst,
 						selectSecond, domainName);
 				newDomain.save();
 				TitleDomain.domainList.add(newDomain);
@@ -82,7 +89,47 @@ public class TitleCommand implements CommandExecutor {
 			} else {
 				sender.sendMessage("§9[TitleDomain]§c请使用/td cube [区域名字] ——创建一个区域为你选取的区域.");
 			}
+		} else if (args[0].equalsIgnoreCase("cylinder")) {
+			if (args.length == 4) {
+				String domainName = args[1];
+				Location selectFirst = DomainSelectMain.selectFist.get(p.getName());
+				if (selectFirst == null) {
+					sender.sendMessage("§9[TitleDomain]§c你没有选取点A.");
+					return false;
+				}
+				if (!isRightInteger(args[2]) || !isRightInteger(args[3])) {
+					sender.sendMessage("§9[TitleDomain]§c请输入一个正确的数字.");
+					return false;
+				}
+				int height = Integer.valueOf(args[2]);
+				int radius = Integer.valueOf(args[3]);
+				for (Domain domain : TitleDomain.domainList) {
+					if (domain.getDomainName().equalsIgnoreCase(domainName)) {
+						sender.sendMessage("§9[TitleDomain]§c区域与 "+domain.getDomainName()+" 区域名字相同.");
+						return false;
+					}
+				}
+				Domain newDomain = new Domain(p.getWorld(), DomainSelectTypeEnum.CIRCLE_DOMAIN.toString(), selectFirst
+						, domainName, height, radius);
+				newDomain.save();
+				TitleDomain.domainList.add(newDomain);
+				TitleDomain.domainNameMap.put(domainName, newDomain);
+				sender.sendMessage("§9[TitleDomain]§e区域 "+newDomain.getDomainName()+" 已经保存了.");
+			} else {
+				sender.sendMessage("§9[TitleDomain]§c请使用/td cylinder [区域名字] [高度] [半径] ——创建一个区域为你定义的圆柱.");
+			}
 		}
 		return false;
+	}
+	public static boolean isRightInteger(String num) {
+		try {
+			int number = Integer.valueOf(num);
+			if (number <= 0) {
+				return false;
+			}
+			return true;
+		} catch (Exception exc) {
+			return false;
+		}
 	}
 }
