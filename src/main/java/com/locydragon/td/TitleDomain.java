@@ -57,6 +57,7 @@ public class TitleDomain extends JavaPlugin {
 			getLogger().info("错误: 找不到前置 ProtocolLib,插件已经自动关闭了.");
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
+		new Metrics(this);
 	}
 
 	public static void saveConfiguration() {
