@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import javax.annotation.Nullable;
 
 /**
  * @author Administrator(雾
@@ -44,37 +43,35 @@ public class Domain {
 		this.domainName = domainName;
 	}
 
-	public String getDomainName() {
+	public synchronized String getDomainName() {
 		return this.domainName;
 	}
 
-	@Nullable
-	public Location getSelectFist() {
+	public synchronized Location getSelectFist() {
 		return this.loc1;
 	}
 
-	@Nullable
-	public Location getSelectSecond() {
+	public synchronized Location getSelectSecond() {
 		return this.loc2;
 	}
 
-	public World getInWorld() {
+	public synchronized World getInWorld() {
 		return this.inWhich;
 	}
 
-	public DomainSelectTypeEnum getType() {
+	public synchronized DomainSelectTypeEnum getType() {
 		return this.type;
 	}
 
-	public int getHeight() {
+	public synchronized int getHeight() {
 		return this.height;
 	}
 
-	public int getRadius() {
+	public synchronized int getRadius() {
 		return this.radius;
 	}
 
-	public void save() {
+	public synchronized void save() {
 		TitleDomain.config.set(this.domainName + ".inWhich", this.inWhich.getName());
 		if (loc1 != null) {
 			TitleDomain.config.set(this.domainName + ".loc1", LocationSelect.serialize(this.loc1));
@@ -88,7 +85,7 @@ public class Domain {
 		TitleDomain.saveConfiguration();
 	}
 
-	public static Domain getByName(String domainName) {
+	public static synchronized Domain getByName(String domainName) {
 		if (TitleDomain.config.getString(domainName + ".inWhich", "Unknown..").equals("Unknown..")) {
 			return null;
 		}
@@ -113,5 +110,14 @@ public class Domain {
 			return new Domain(inWhich, DomainSelectTypeEnum.NORMAL_DOMAIN.toString(), loc1, loc2, domainName);
 		}
 		return null;
+	}
+
+	public boolean isCoincideWith(Location loc1, Location loc2) {
+		for (Location loc : LocationSelect.fillWith(loc1, loc2)) {
+			if (LocationSelect.isInAABB(loc, this.loc1, this.loc2)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

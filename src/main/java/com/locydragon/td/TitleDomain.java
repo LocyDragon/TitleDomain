@@ -37,6 +37,10 @@ public class TitleDomain extends JavaPlugin {
 			domainNameMap.put(domain, domainObject);
 		}
 		getLogger().info("已经载入" + domainList.size() + "个区域.");
+		if (Bukkit.getPluginManager().getPlugin("ProtocolLib") == null) {
+			getLogger().info("错误: 找不到前置 ProtocolLib,插件已经自动关闭了.");
+			Bukkit.getPluginManager().disablePlugin(this);
+		}
 	}
 
 	public static void saveConfiguration() {

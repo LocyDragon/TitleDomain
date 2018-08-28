@@ -4,6 +4,7 @@ import com.locydragon.td.TitleDomain;
 import com.locydragon.td.api.Domain;
 import com.locydragon.td.api.DomainChangeEvent;
 import com.locydragon.td.util.CylinderHelper;
+import com.locydragon.td.util.LocationSelect;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -59,8 +60,8 @@ public class AsyncDomainReader extends Thread {
 						}
 						break;
 					case NORMAL_DOMAIN:
-						if (target.getLocation().toVector()
-								.isInAABB(domain.getSelectFist().toVector(), domain.getSelectSecond().toVector())
+						if (LocationSelect.isInAABB(target.getLocation(),
+								domain.getSelectFist(), domain.getSelectSecond())
 								&& target.getWorld().getName().equals(domain.getInWorld().getName())) {
 							this.now = domain;
 							if (last != null && !last.getDomainName().equals(domain.getDomainName())) {
