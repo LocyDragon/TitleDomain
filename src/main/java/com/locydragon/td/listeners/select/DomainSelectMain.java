@@ -1,5 +1,6 @@
 package com.locydragon.td.listeners.select;
 
+import com.locydragon.td.TitleDomain;
 import com.locydragon.td.util.LocationSelect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,7 +17,8 @@ public class DomainSelectMain implements Listener {
 
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
-		if (e.getItem() != null && e.getItem().getType() == Material.GOLD_HOE &&
+		if (e.getItem() != null && e.getItem().getType() ==
+				Material.getMaterial(TitleDomain.settings.getString("tool", "GOLD_HOE")) &&
 				e.getPlayer().hasPermission("TitleDomain.admin")
 				&& e.getClickedBlock() != null) {
 			if (e.getAction() == Action.LEFT_CLICK_BLOCK) {

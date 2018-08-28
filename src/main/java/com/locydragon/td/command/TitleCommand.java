@@ -217,7 +217,8 @@ public class TitleCommand implements CommandExecutor {
 						TitleDomain.domainList.remove(i);
 					}
 				}
-				TitleDomain.titleForDomain.remove(domain);
+				TitleDomain.titleForDomain.remove(domain+"/enter");
+				TitleDomain.titleForDomain.remove(domain+"/leave");
 				TitleDomain.config.set(domain, null);
 				TitleDomain.titleSave.set(domain+"/enter", null);
 				TitleDomain.titleSave.set(domain+"/leave", null);

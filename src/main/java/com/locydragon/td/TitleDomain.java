@@ -8,6 +8,7 @@ import com.locydragon.td.listeners.select.DomainSelectMain;
 import com.locydragon.td.listeners.thread.AsyncDomainReader;
 import com.locydragon.td.util.Title;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,6 +25,7 @@ public class TitleDomain extends JavaPlugin {
 	public static TitleDomain instance;
 	public static FileConfiguration config;
 	public static FileConfiguration titleSave;
+	public static FileConfiguration settings;
 	public static Vector<Domain> domainList = new Vector<>();
 	public static File titleFile = new File(".//plugins//TitleDomain//titles.yml");
 	public static ConcurrentHashMap<String, Domain> domainNameMap = new ConcurrentHashMap<>();
@@ -87,5 +89,25 @@ public class TitleDomain extends JavaPlugin {
 			}
 		}
 		titleSave = YamlConfiguration.loadConfiguration(titleFile);
+	}
+
+	public void loadSettings() {
+		File titleFile = new File(".//plugins//TitleDomain//settings.yml");
+		if (!(titleFile.exists())) {
+			try {
+				titleFile.createNewFile();
+			} catch (IOException exc) {
+				exc.printStackTrace();
+			}
+			settings = YamlConfiguration.loadConfiguration(titleFile);
+			settings.set("tool", Material.GOLD_HOE.toString());
+			try {
+				settings.save(new File(".//plugins//TitleDomain//settings.yml"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return;
+		}
+		settings = YamlConfiguration.loadConfiguration(titleFile);
 	}
 }
