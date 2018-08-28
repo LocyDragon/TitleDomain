@@ -27,7 +27,7 @@ public class TitleDomain extends JavaPlugin {
 	public static FileConfiguration titleSave;
 	public static FileConfiguration settings;
 	public static Vector<Domain> domainList = new Vector<>();
-	public static File titleFile = new File(".//plugins//TitleDomain//titles.yml");
+	public static File titleFile = new File(".//plugins//TitleDomain//Data//DataTitle.yml");
 	public static ConcurrentHashMap<String, Domain> domainNameMap = new ConcurrentHashMap<>();
 	public static ConcurrentHashMap<String, AsyncDomainReader> readerHashMap = new ConcurrentHashMap<>();
 	public static ConcurrentHashMap<String, Title> titleForDomain = new ConcurrentHashMap<>();
@@ -39,11 +39,10 @@ public class TitleDomain extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new DomainSelectMain(), this);
 		Bukkit.getPluginManager().registerEvents(new DomainTitleListener(), this);
 		Bukkit.getPluginCommand("td").setExecutor(new TitleCommand());
-		saveDefaultConfig();
 		loadTitle();
 		loadSettings();
+		loadData();
 		instance = this;
-		config = getConfig();
 		for (String domain : config.getKeys(false)) {
 			Domain domainObject = Domain.getByName(domain);
 			domainList.add(domainObject);
@@ -62,7 +61,7 @@ public class TitleDomain extends JavaPlugin {
 
 	public static void saveConfiguration() {
 		try {
-			config.save(new File(".//plugins//TitleDomain//config.yml"));
+			config.save(new File(".//plugins//TitleDomain//Data//data.yml"));
 		} catch (IOException exc) {
 			exc.printStackTrace();
 		}
@@ -81,7 +80,8 @@ public class TitleDomain extends JavaPlugin {
 	}
 
 	public void loadTitle() {
-		File titleFile = new File(".//plugins//TitleDomain//titles.yml");
+		File titleFile = new File(".//plugins//TitleDomain//Data//DataTitle.yml");
+		titleFile.getParentFile().mkdirs();
 		if (!(titleFile.exists())) {
 			try {
 				titleFile.createNewFile();
@@ -92,8 +92,22 @@ public class TitleDomain extends JavaPlugin {
 		titleSave = YamlConfiguration.loadConfiguration(titleFile);
 	}
 
+	public void loadData() {
+		File titleFile = new File(".//plugins//TitleDomain//Data//data.yml");
+		titleFile.getParentFile().mkdirs();
+		if (!(titleFile.exists())) {
+			try {
+				titleFile.createNewFile();
+			} catch (IOException exc) {
+				exc.printStackTrace();
+			}
+		}
+		config = YamlConfiguration.loadConfiguration(titleFile);
+	}
+
 	public void loadSettings() {
-		File titleFile = new File(".//plugins//TitleDomain//settings.yml");
+		File titleFile = new File(".//plugins//TitleDomain//config.yml");
+		titleFile.getParentFile().mkdirs();
 		if (!(titleFile.exists())) {
 			try {
 				titleFile.createNewFile();
@@ -103,7 +117,7 @@ public class TitleDomain extends JavaPlugin {
 			settings = YamlConfiguration.loadConfiguration(titleFile);
 			settings.set("tool", Material.GOLD_HOE.toString());
 			try {
-				settings.save(new File(".//plugins//TitleDomain//settings.yml"));
+				settings.save(new File(".//plugins//TitleDomain//config.yml"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
