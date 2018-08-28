@@ -58,8 +58,11 @@ public class TitleDomain extends JavaPlugin {
 	}
 
 	public static void saveConfiguration() {
-		instance.saveConfig();
-		instance.reloadConfig();
+		try {
+			config.save(new File(".//plugins//TitleDomain//config.yml"));
+		} catch (IOException exc) {
+			exc.printStackTrace();
+		}
 	}
 
 	public static void reloadConfiguration() {

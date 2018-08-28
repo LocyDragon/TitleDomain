@@ -12,6 +12,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
+
 /**
  * @author Administrator
  */
@@ -25,12 +27,9 @@ public class TitleCommand implements CommandExecutor {
 		Player p = (Player) sender;
 		if (args.length <= 0) {
 			sender.sendMessage("§9[TitleDomain]§c指令用法不正确.");
+			return false;
 		}
-		if (args[0].equalsIgnoreCase("reload")) {
-			sender.sendMessage("§9[TitleDomain]§c重载配置文件中...");
-			TitleDomain.reloadConfiguration();
-			sender.sendMessage("§9[TitleDomain]§c载入完成.");
-		} else if (args[0].equalsIgnoreCase("world")) {
+		if (args[0].equalsIgnoreCase("world")) {
 			if (args.length == 2) {
 				String domainName = args[1];
 				if (domainName.contains("/")) {
@@ -38,6 +37,9 @@ public class TitleCommand implements CommandExecutor {
 					return false;
 				}
 				for (Domain domain : TitleDomain.domainList) {
+					if (domain == null) {
+						continue;
+					}
 					if (domain.getDomainName().equalsIgnoreCase(domainName)) {
 						sender.sendMessage("§9[TitleDomain]§c区域与 " + domain.getDomainName() + " 区域名字相同.");
 						return false;
@@ -81,6 +83,9 @@ public class TitleCommand implements CommandExecutor {
 					return false;
 				}
 				for (Domain domain : TitleDomain.domainList) {
+					if (domain == null) {
+						continue;
+					}
 					if (domain.getDomainName().equalsIgnoreCase(domainName)) {
 						sender.sendMessage("§9[TitleDomain]§c区域与 " + domain.getDomainName() + " 区域名字相同.");
 						return false;
@@ -118,6 +123,9 @@ public class TitleCommand implements CommandExecutor {
 				int height = Integer.valueOf(args[2]);
 				int radius = Integer.valueOf(args[3]);
 				for (Domain domain : TitleDomain.domainList) {
+					if (domain == null) {
+						continue;
+					}
 					if (domain.getDomainName().equalsIgnoreCase(domainName)) {
 						sender.sendMessage("§9[TitleDomain]§c区域与 " + domain.getDomainName() + " 区域名字相同.");
 						return false;
@@ -199,6 +207,29 @@ public class TitleCommand implements CommandExecutor {
 				sender.sendMessage("§9[TitleDomain]§e已经为区域 "+domainName+" 添加了一个Title记录~");
 			} else {
 				sender.sendMessage("§9[TitleDomain]§c请使用/td set [区域名字] [enter/leave] [title/subtitle] [信息] [淡入] [显示时间] [淡出] ——添加一个Title信息.");
+			}
+		} else if (args[0].equalsIgnoreCase("del")) {
+			if (args.length == 2) {
+				String domain = args[1];
+				TitleDomain.domainNameMap.remove(domain);
+				for (int i = 0;i < TitleDomain.domainList.size();i++) {
+					if (TitleDomain.domainList.get(i).getDomainName().equals(domain)) {
+						TitleDomain.domainList.remove(i);
+					}
+				}
+				TitleDomain.titleForDomain.remove(domain);
+				TitleDomain.config.set(domain, null);
+				TitleDomain.titleSave.set(domain+"/enter", null);
+				TitleDomain.titleSave.set(domain+"/leave", null);
+				TitleDomain.saveConfiguration();
+				try {
+					TitleDomain.titleSave.save(TitleDomain.titleFile);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				sender.sendMessage("§9[TitleDomain]§c删除成功.");
+			} else {
+				sender.sendMessage("§9[TitleDomain]§c使用/td del [区域名字] ——删除有关该区域的所有记录.");
 			}
 		}
 		return false;

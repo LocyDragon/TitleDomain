@@ -22,7 +22,7 @@ public class Title {
 	}
 
 	public void sendTo(Player target) {
-		TitleUtils.sendTitle(target, this.fadeIn, this.display, this.fadeOut, this.title, this.sub);
+		TitleUtils.sendTitle(target, this.fadeIn * 20, this.display * 20, this.fadeOut * 20, this.title, this.sub);
 	}
 
 	public String toJSON() {

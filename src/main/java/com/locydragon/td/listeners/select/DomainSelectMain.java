@@ -26,6 +26,7 @@ public class DomainSelectMain implements Listener {
 				selectFist.put(e.getPlayer().getName(), e.getClickedBlock().getLocation());
 				e.getPlayer().sendMessage("§9[TitleDomain]§6选取选择点A: "
 						+ LocationSelect.serialize(e.getClickedBlock().getLocation()));
+				e.setCancelled(true);
 			} else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 				if (selectSecond.keySet().contains(e.getPlayer().getName())) {
 					selectSecond.remove(e.getPlayer().getName());
@@ -33,6 +34,7 @@ public class DomainSelectMain implements Listener {
 				selectSecond.put(e.getPlayer().getName(), e.getClickedBlock().getLocation());
 				e.getPlayer().sendMessage("§9[TitleDomain]§6选取选择点B: "
 						+ LocationSelect.serialize(e.getClickedBlock().getLocation()));
+				e.setCancelled(true);
 			}
 		}
 	}
