@@ -105,7 +105,7 @@ public class TitleCommand implements CommandExecutor {
 				sender.sendMessage("§9[TitleDomain]§c请使用/td cube [区域名字] ——创建一个区域为你选取的区域.");
 			}
 		} else if (args[0].equalsIgnoreCase("cylinder")) {
-			if (args.length == 4) {
+			if (args.length == 3) {
 				String domainName = args[1];
 				if (domainName.contains("/")) {
 					sender.sendMessage("§9[TitleDomain]§c区域名不能包含字符/.");
@@ -116,12 +116,11 @@ public class TitleCommand implements CommandExecutor {
 					sender.sendMessage("§9[TitleDomain]§c你没有选取点A.");
 					return false;
 				}
-				if (!isRightInteger(args[2]) || !isRightInteger(args[3])) {
+				if (!isRightInteger(args[2])) {
 					sender.sendMessage("§9[TitleDomain]§c请输入一个正确的数字.");
 					return false;
 				}
-				int height = Integer.valueOf(args[2]);
-				int radius = Integer.valueOf(args[3]);
+				int radius = Integer.valueOf(args[2]);
 				for (Domain domain : TitleDomain.domainList) {
 					if (domain == null) {
 						continue;
@@ -132,13 +131,13 @@ public class TitleCommand implements CommandExecutor {
 					}
 				}
 				Domain newDomain = new Domain(p.getWorld(), DomainSelectTypeEnum.CIRCLE_DOMAIN.toString(), selectFirst
-						, domainName, height, radius);
+						, domainName, 256, radius);
 				newDomain.save();
 				TitleDomain.domainList.add(newDomain);
 				TitleDomain.domainNameMap.put(domainName, newDomain);
 				sender.sendMessage("§9[TitleDomain]§e区域 " + newDomain.getDomainName() + " 已经保存了.");
 			} else {
-				sender.sendMessage("§9[TitleDomain]§c请使用/td cylinder [区域名字] [高度] [半径] ——创建一个区域为你定义的圆柱.");
+				sender.sendMessage("§9[TitleDomain]§c请使用/td cylinder [区域名字] [半径] ——创建一个区域为你定义的圆柱.");
 			}
 		} else if (args[0].equalsIgnoreCase("set")) {
 			if (args.length == 8) {
