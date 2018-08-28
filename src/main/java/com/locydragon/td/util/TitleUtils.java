@@ -14,10 +14,10 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
 /**
  * Title工具类
- * 
+ *
  * @author May_Speed, D_xiaox
  * @since 2016/12/26
- * 
+ * <p>
  * update 2017/8/05
  * update 2018/8/02 星空(D_xiaox)
  */
@@ -25,22 +25,16 @@ public class TitleUtils {
 
 	/**
 	 * 给一个玩家发送Title信息 1.8+
-	 * 
-	 * @param player
-	 *            发送的玩家
-	 * @param fadeIn
-	 *            淡入时间
-	 * @param stay
-	 *            停留时间
-	 * @param fadeOut
-	 *            淡出时间
-	 * @param title
-	 *            主标题
-	 * @param subTitle
-	 *            副标题
+	 *
+	 * @param player   发送的玩家
+	 * @param fadeIn   淡入时间
+	 * @param stay     停留时间
+	 * @param fadeOut  淡出时间
+	 * @param title    主标题
+	 * @param subTitle 副标题
 	 */
 	public static void sendTitle(Player player, Integer fadeIn, Integer stay, Integer fadeOut, String title,
-			String subTitle) {
+								 String subTitle) {
 		// 获取PL管理
 		ProtocolManager pm = ProtocolLibrary.getProtocolManager();
 		PacketContainer packet = null;
@@ -78,7 +72,7 @@ public class TitleUtils {
 				e.printStackTrace();
 			}
 		}
-		
+
 		packet = pm.createPacket(PacketType.Play.Server.TITLE);
 		packet.getTitleActions().write(0, EnumWrappers.TitleAction.TIMES);
 		packet.getIntegers().write(0, fadeIn); // ---> c

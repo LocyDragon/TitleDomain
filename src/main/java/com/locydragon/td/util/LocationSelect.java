@@ -5,6 +5,7 @@ import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.bukkit.util.Vector;
 
 public class LocationSelect {
