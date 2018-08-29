@@ -1,6 +1,6 @@
 name: TitleDomain
 main: com.locydragon.td.TitleDomain
-version: 1.0.0
+version: 1.1.0
 author: LocyDragon
 depend: [ProtocolLib]
 commands:

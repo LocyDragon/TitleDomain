@@ -21,12 +21,18 @@ public class ThreadLoadListener implements Listener {
 
 	@EventHandler
 	public void onLeave(PlayerQuitEvent e) {
+		if (TitleDomain.readerHashMap.get(e.getPlayer().getName()) == null) {
+			return;
+		}
 		TitleDomain.readerHashMap.get(e.getPlayer().getName()).stopThread();
 		TitleDomain.readerHashMap.remove(e.getPlayer().getName());
 	}
 
 	@EventHandler
 	public void onBeingKicked(PlayerKickEvent e) {
+		if (TitleDomain.readerHashMap.get(e.getPlayer().getName()) == null) {
+			return;
+		}
 		TitleDomain.readerHashMap.get(e.getPlayer().getName()).stopThread();
 		TitleDomain.readerHashMap.remove(e.getPlayer().getName());
 	}
