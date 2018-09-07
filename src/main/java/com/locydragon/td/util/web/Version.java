@@ -17,7 +17,7 @@ public class Version {
 			return genedMsg;
 		}
 		if (TitleDomain.webVersion.equals(version)) {
-			genedMsg.add("§7欢迎您使用§bTitleDomain§7——最新版本.版本号-"+version+"!");
+			genedMsg.add("§7欢迎您使用§bTitleDomain§7——最新版本!版本号-"+version+"!");
 			return genedMsg;
 		}
 		genedMsg.add("§6TitleDomain不是最新版本!最新版本号: §b"+TitleDomain.webVersion+"§6!你的版本: §b"+version);

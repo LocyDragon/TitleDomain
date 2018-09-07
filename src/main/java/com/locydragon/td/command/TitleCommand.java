@@ -4,7 +4,9 @@ import com.locydragon.td.TitleDomain;
 import com.locydragon.td.api.Domain;
 import com.locydragon.td.api.type.DomainSelectTypeEnum;
 import com.locydragon.td.listeners.select.DomainSelectMain;
+import com.locydragon.td.util.LocationSelect;
 import com.locydragon.td.util.Title;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -13,6 +15,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Administrator
@@ -170,7 +174,7 @@ public class TitleCommand implements CommandExecutor {
 				int numFadeIn = Integer.valueOf(fadeIn);
 				int numStay = Integer.valueOf(stay);
 				int numFadeOut = Integer.valueOf(fadeOut);
-				String magicValue = domainName+"/"+when;
+				String magicValue = domainName + "/" + when;
 				if (TitleDomain.titleForDomain.get(magicValue) == null) {
 					if (title.equals("title")) {
 						Title titleObj = new Title("", msg, numFadeIn, numStay, numFadeOut);
@@ -203,7 +207,7 @@ public class TitleCommand implements CommandExecutor {
 					}
 					TitleDomain.titleForDomain.put(magicValue, titleObj);
 				}
-				sender.sendMessage("§9[TitleDomain]§e已经为区域 "+domainName+" 添加了一个Title记录~");
+				sender.sendMessage("§9[TitleDomain]§e已经为区域 " + domainName + " 添加了一个Title记录~");
 			} else {
 				sender.sendMessage("§9[TitleDomain]§c请使用/td set [区域名字] [enter/leave] [title/subtitle] [信息] [淡入] [显示时间] [淡出] ——添加一个Title信息.");
 			}
@@ -211,16 +215,16 @@ public class TitleCommand implements CommandExecutor {
 			if (args.length == 2) {
 				String domain = args[1];
 				TitleDomain.domainNameMap.remove(domain);
-				for (int i = 0;i < TitleDomain.domainList.size();i++) {
+				for (int i = 0; i < TitleDomain.domainList.size(); i++) {
 					if (TitleDomain.domainList.get(i).getDomainName().equals(domain)) {
 						TitleDomain.domainList.remove(i);
 					}
 				}
-				TitleDomain.titleForDomain.remove(domain+"/enter");
-				TitleDomain.titleForDomain.remove(domain+"/leave");
+				TitleDomain.titleForDomain.remove(domain + "/enter");
+				TitleDomain.titleForDomain.remove(domain + "/leave");
 				TitleDomain.config.set(domain, null);
-				TitleDomain.titleSave.set(domain+"/enter", null);
-				TitleDomain.titleSave.set(domain+"/leave", null);
+				TitleDomain.titleSave.set(domain + "/enter", null);
+				TitleDomain.titleSave.set(domain + "/leave", null);
 				TitleDomain.saveConfiguration();
 				try {
 					TitleDomain.titleSave.save(TitleDomain.titleFile);
@@ -230,6 +234,64 @@ public class TitleCommand implements CommandExecutor {
 				sender.sendMessage("§9[TitleDomain]§c删除成功.");
 			} else {
 				sender.sendMessage("§9[TitleDomain]§c使用/td del [区域名字] ——删除有关该区域的所有记录.");
+			}
+		} else if (args[0].equalsIgnoreCase("info")) {
+			if (args.length == 2) {
+				String domainName = args[1];
+				Domain targetDomain = TitleDomain.domainNameMap.get(domainName);
+				if (targetDomain == null) {
+					sender.sendMessage("§9[TitleDomain]§c找不到你输入的区域.");
+					return false;
+				}
+				List<String> msg = new ArrayList<>();
+				msg.add("§6===========[TitleDomain区域信息]============");
+				msg.add("§6区域名: §b" + domainName);
+				msg.add("§6区域所在世界名: §b" + targetDomain.getInWorld().getName());
+				switch (targetDomain.getType()) {
+					case WORLD_DOMAIN:
+						msg.add("§6区域类型: §b世界区域");
+						break;
+					case CIRCLE_DOMAIN:
+						msg.add("§6区域类型: §b圆柱区域");
+						msg.add("§6圆心坐标: §b" + LocationSelect.serialize(targetDomain.getSelectFist()));
+						break;
+					case NORMAL_DOMAIN:
+						msg.add("§6区域类型: §b普通矩形选区");
+						msg.add("§6选取A坐标: §b" + LocationSelect.serialize(targetDomain.getSelectFist()));
+						msg.add("§6选取B坐标: §b" + LocationSelect.serialize(targetDomain.getSelectSecond()));
+						break;
+				}
+				msg.add("§6===========[TitleDomain]============");
+				msg.forEach(line -> p.sendMessage(line));
+			} else {
+				sender.sendMessage("§9[TitleDomain]§c使用/td info [区域名字] ——查看有关该区域的所有信息.");
+			}
+		} else if (args[0].equalsIgnoreCase("goto")) {
+			if (args.length == 3) {
+				Player who = Bukkit.getPlayer(args[2]);
+				String domainName = args[1];
+				Domain targetDomain = TitleDomain.domainNameMap.get(domainName);
+				if (targetDomain == null) {
+					sender.sendMessage("§9[TitleDomain]§c找不到你输入的区域.");
+					return false;
+				}
+				switch (targetDomain.getType()) {
+					case CIRCLE_DOMAIN:
+						who.teleport(targetDomain.getSelectFist());
+						break;
+					case NORMAL_DOMAIN:
+						who.teleport(LocationSelect.centerOf(targetDomain.getSelectFist()
+								, targetDomain.getSelectSecond()));
+						break;
+					case WORLD_DOMAIN:
+						who.teleport(new Location(targetDomain.getInWorld(), 0, 256 / 2, 0));
+						break;
+					default:
+						break;
+				}
+				who.sendMessage("§a传送成功.");
+			} else {
+				sender.sendMessage("§9[TitleDomain]§c使用/td goto [区域名字] [玩家名字] ——把某个玩家传送到该领地的中心位置.");
 			}
 		}
 		return false;

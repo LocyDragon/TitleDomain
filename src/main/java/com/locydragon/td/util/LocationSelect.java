@@ -83,4 +83,17 @@ public class LocationSelect {
 				&& (needGo.getBlockY() >= yMin) && (needGo.getBlockY() <= yMax)
 				&& (needGo.getBlockZ() >= zMin) && (needGo.getBlockZ() <= zMax);
 	}
+
+	public static Location centerOf(Location AA, Location BB) {
+		int xMax = AA.getBlockX() > BB.getBlockX() ? AA.getBlockX() : BB.getBlockX();
+		int xMin = AA.getBlockX() > BB.getBlockX() ? BB.getBlockX() : AA.getBlockX();
+		int yMax = AA.getBlockY() > BB.getBlockY() ? AA.getBlockY() : BB.getBlockY();
+		int yMin = AA.getBlockY() > BB.getBlockY() ? BB.getBlockY() : AA.getBlockY();
+		int zMax = AA.getBlockZ() > BB.getBlockZ() ? AA.getBlockZ() : BB.getBlockZ();
+		int zMin = AA.getBlockZ() > BB.getBlockZ() ? BB.getBlockZ() : AA.getBlockZ();
+		int xMiddle = (xMax - xMin) / 2;
+		int yMiddle = (yMax - yMin) / 2;
+		int zMiddle = (zMax - zMin) / 2;
+		return new Location(AA.getWorld(), xMin + xMiddle, yMin + yMiddle, zMin + zMiddle);
+	}
 }

@@ -4,6 +4,7 @@ import com.locydragon.td.api.Domain;
 import com.locydragon.td.command.TitleCommand;
 import com.locydragon.td.listeners.DomainTitleListener;
 import com.locydragon.td.listeners.ThreadLoadListener;
+import com.locydragon.td.listeners.UpdateListener;
 import com.locydragon.td.listeners.select.DomainSelectMain;
 import com.locydragon.td.listeners.thread.AsyncDomainReader;
 import com.locydragon.td.util.Title;
@@ -47,6 +48,7 @@ public class TitleDomain extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new ThreadLoadListener(), this);
 		Bukkit.getPluginManager().registerEvents(new DomainSelectMain(), this);
 		Bukkit.getPluginManager().registerEvents(new DomainTitleListener(), this);
+		Bukkit.getPluginManager().registerEvents(new UpdateListener(), this);
 		Bukkit.getPluginCommand("td").setExecutor(new TitleCommand());
 		loadTitle();
 		loadSettings();
@@ -145,12 +147,12 @@ public class TitleDomain extends JavaPlugin {
 			webVersion = ((String) result.returned).trim();
 			WebResult resultInfo = WebCloud.getStringByWeb(Version.webInfoURL);
 			if (resultInfo.result) {
-				Arrays.stream(((String) resultInfo.returned).split("\\|")).forEach(line -> webInfo.add(line));
+				Arrays.stream(((String) resultInfo.returned).split("\\|")).forEach(webInfo::add);
 			}
 			Thread asyncLogger = new Thread(() -> {
 				try {
 					Thread.sleep(1000 * 10);
-					Version.genVersionMsg().forEach(eachLine -> System.out.println(eachLine));
+					Version.genVersionMsg().forEach(System.out::println);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
