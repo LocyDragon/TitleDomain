@@ -7,6 +7,9 @@ import com.locydragon.td.listeners.ThreadLoadListener;
 import com.locydragon.td.listeners.select.DomainSelectMain;
 import com.locydragon.td.listeners.thread.AsyncDomainReader;
 import com.locydragon.td.util.Title;
+import com.locydragon.td.util.web.Version;
+import com.locydragon.td.util.web.WebCloud;
+import com.locydragon.td.util.web.WebResult;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,7 +18,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,6 +37,9 @@ public class TitleDomain extends JavaPlugin {
 	public static ConcurrentHashMap<String, Domain> domainNameMap = new ConcurrentHashMap<>();
 	public static ConcurrentHashMap<String, AsyncDomainReader> readerHashMap = new ConcurrentHashMap<>();
 	public static ConcurrentHashMap<String, Title> titleForDomain = new ConcurrentHashMap<>();
+	public static Boolean visitedVersion = false;
+	public static String webVersion = null;
+	public static List<String> webInfo = new ArrayList<>();
 
 	@Override
 	public void onEnable() {
@@ -43,6 +51,7 @@ public class TitleDomain extends JavaPlugin {
 		loadTitle();
 		loadSettings();
 		loadData();
+		loadWeb();
 		instance = this;
 		for (String domain : config.getKeys(false)) {
 			Domain domainObject = Domain.getByName(domain);
@@ -59,6 +68,7 @@ public class TitleDomain extends JavaPlugin {
 			Bukkit.getPluginManager().disablePlugin(this);
 		}
 		new Metrics(this);
+		Version.version = this.getDescription().getVersion();
 	}
 
 	public static void saveConfiguration() {
@@ -126,5 +136,27 @@ public class TitleDomain extends JavaPlugin {
 			return;
 		}
 		settings = YamlConfiguration.loadConfiguration(titleFile);
+	}
+
+	public void loadWeb() {
+		Thread webTime = new Thread(() -> {
+			WebResult result = WebCloud.getStringByWeb(Version.webVersionURL);
+			visitedVersion = result.result;
+			webVersion = ((String) result.returned).trim();
+			WebResult resultInfo = WebCloud.getStringByWeb(Version.webInfoURL);
+			if (resultInfo.result) {
+				Arrays.stream(((String) resultInfo.returned).split("\\|")).forEach(line -> webInfo.add(line));
+			}
+			Thread asyncLogger = new Thread(() -> {
+				try {
+					Thread.sleep(1000 * 10);
+					Version.genVersionMsg().forEach(eachLine -> System.out.println(eachLine));
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
+			asyncLogger.start();
+		});
+		webTime.start();
 	}
 }
