@@ -30,6 +30,7 @@ public class TitleCommand implements CommandExecutor {
 		}
 		Player p = (Player) sender;
 		if (args.length <= 0) {
+			sendHelp(sender);
 			sender.sendMessage("§9[TitleDomain]§c指令用法不正确.");
 			return false;
 		}
@@ -293,6 +294,10 @@ public class TitleCommand implements CommandExecutor {
 			} else {
 				sender.sendMessage("§9[TitleDomain]§c使用/td goto [区域名字] [玩家名字] ——把某个玩家传送到该领地的中心位置.");
 			}
+		} else if (args[0].equalsIgnoreCase("help")) {
+			sendHelp(sender);
+		} else {
+			sendHelp(sender);
 		}
 		return false;
 	}
@@ -307,5 +312,14 @@ public class TitleCommand implements CommandExecutor {
 		} catch (Exception exc) {
 			return false;
 		}
+	}
+
+	public void sendHelp(CommandSender sender) {
+		sender.sendMessage("§9[TitleDomain]§c请使用/td world [区域名字] ——选取世界区域为你所在的区域.");
+		sender.sendMessage("§9[TitleDomain]§c请使用/td cube [区域名字] ——创建一个区域为你选取的区域.");
+		sender.sendMessage("§9[TitleDomain]§c请使用/td cylinder [区域名字] [半径] ——创建一个区域为你定义的圆柱.");
+		sender.sendMessage("§9[TitleDomain]§c请使用/td set [区域名字] [enter/leave] [title/subtitle] [信息] [淡入] [显示时间] [淡出] ——添加一个Title信息.");
+		sender.sendMessage("§9[TitleDomain]§c使用/td del [区域名字] ——删除有关该区域的所有记录.");
+		sender.sendMessage("§9[TitleDomain]§c使用/td goto [区域名字] [玩家名字] ——把某个玩家传送到该领地的中心位置.");
 	}
 }

@@ -12,7 +12,7 @@ public class Version {
 	public static List<String> genVersionMsg() {
 		List<String> genedMsg = new ArrayList<>();
 		genedMsg.add("§6===========[TitleDomain]============");
-		if (TitleDomain.visitedVersion) {
+		if (!TitleDomain.visitedVersion) {
 			genedMsg.add("§c无法访问版本更新网络.找不到更新信息.");
 			return genedMsg;
 		}
